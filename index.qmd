@@ -1,0 +1,112 @@
+---
+format:
+  revealjs:
+    theme: [default, seasons.scss]
+echo: true
+---
+
+
+# [openalexR](https://github.com/ropensci/openalexR) {.spring}
+
+an R package to interface with openalex API
+
+## 
+
+<iframe class="stretch" data-src="https://openalex.org/" title="https://openalex.org/">
+
+</iframe>
+
+## {#first-query .spring}
+
+::: panel-tabset
+
+### Search authors
+
+You can look for an entity interactively at <https://explore.openalex.org/>.
+Or:
+
+```{r}
+#| code-line-numbers: "4-7"
+library(openalexR)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(tidyr)
+
+jj_hadley_au <- oa_fetch(
+  "authors",
+  display_name = "JJ Allaire|Hadley Wickham"
+)
+```
+
+### Ouput
+```{r}
+jj_hadley_au %>% 
+  mutate(id = openalexR:::shorten_oaid(id)) %>% 
+  select(id, display_name, works_count) %>% 
+  head()
+```
+
+:::
+
+## {#works-tab .smaller .spring}
+
+```{r}
+#| label: works-code
+#| output-location: fragment
+jj_hadley <- oa_fetch(
+  "works",
+  author.id = jj_hadley_au$id[1:2]
+)
+
+DT::datatable(jj_hadley)
+```
+
+
+
+## Comparing concepts {.spring}
+
+```{r}
+#| echo: false
+theme_set(theme_classic())
+theme_update(
+  panel.grid.minor = element_blank(),
+  plot.background = element_rect(fill = "#F4EBE7", colour = NA),
+  panel.background = element_rect(fill = "#F4EBE7", colour = NA)
+)
+
+authors_df <- jj_hadley %>%
+  select(id, work = display_name, author, concepts) %>% 
+  unnest(author)
+
+concepts_df <- authors_df %>% 
+  select(work, author = au_display_name, concepts) %>% 
+  filter(author %in% c("JJ Allaire", "Hadley Wickham")) %>% 
+  unnest(concepts) %>%
+  filter(level == 0) %>% 
+  group_by(author, concept = display_name, level) %>% 
+  summarise(score = mean(score), .groups = "drop") 
+
+ggplot(concepts_df) +
+  aes(
+    y = fct_reorder2(concept, author, -score),
+    x = score, fill = author
+  ) +
+  facet_grid(
+    cols = vars(author),
+    space = "free_y"
+  ) +
+  geom_col() +
+  scale_fill_manual(values = c("#54671B", "#E6AE3E"), guide = "none") +
+  labs(x = "Concept relevance", y = NULL) +
+  coord_cartesian(expand = 0)
+
+```
+
+## {#last-notes .spring}
+
+::: {.callout-tip}
+## where's the repo {.centered-slide-text}
+
+<https://github.com/ropensci/openalexR>
+:::
