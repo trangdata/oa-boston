@@ -4,13 +4,16 @@ format:
     theme: [default, seasons.scss]
     highlight-style: tango
 echo: true
+author: Trang Le
 ---
 
 # [openalexR](https://github.com/ropensci/openalexR) {.spring}
 
-an R package to interface with openalex API
+an R package to interface with OpenAlex API
 
-## {#intro}
+[trangdata.github.io/oa-boston](trangdata.github.io/oa-boston)
+
+##  {#intro}
 
 <iframe class="stretch" data-src="https://openalex.org/" title="https://openalex.org/">
 
@@ -22,12 +25,12 @@ an R package to interface with openalex API
 ### Entities
 
 <center>
-<!-- ![](images/oar.png){width=800px} -->
-<img src="images/oar.png" alt="entities" class="rounded-corners" width="800px"/>
+
+<!-- ![dhimmel](images/oar.png){width=700px} -->
+
+<img src="images/oar.png" alt="entities-dhimmel" class="rounded-corners" width="700px"/>
+
 </center>
-
-
-
 
 ### Search authors
 
