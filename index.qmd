@@ -2,36 +2,47 @@
 format:
   revealjs:
     theme: [default, seasons.scss]
+    highlight-style: tango
 echo: true
 ---
-
 
 # [openalexR](https://github.com/ropensci/openalexR) {.spring}
 
 an R package to interface with openalex API
 
-## 
+## {#intro}
 
 <iframe class="stretch" data-src="https://openalex.org/" title="https://openalex.org/">
 
 </iframe>
 
-## {#first-query .spring}
+##  {#first-query .spring}
 
 ::: panel-tabset
+### Entities
+
+<center>
+<!-- ![](images/oar.png){width=800px} -->
+<img src="images/oar.png" alt="entities" class="rounded-corners" width="800px"/>
+</center>
+
+
+
 
 ### Search authors
 
 You can look for an entity interactively at <https://explore.openalex.org/>.
 Or:
 
-```{r}
-#| code-line-numbers: "4-7"
-library(openalexR)
+```{r include=FALSE}
 library(dplyr)
 library(ggplot2)
 library(forcats)
 library(tidyr)
+```
+
+```{r}
+library(openalexR)
 
 jj_hadley_au <- oa_fetch(
   "authors",
@@ -39,20 +50,20 @@ jj_hadley_au <- oa_fetch(
 )
 ```
 
-### Ouput
+### Output
+
 ```{r}
 jj_hadley_au %>% 
   mutate(id = openalexR:::shorten_oaid(id)) %>% 
-  select(id, display_name, works_count) %>% 
-  head()
+  select(id, display_name, works_count)
 ```
-
 :::
 
-## {#works-tab .smaller .spring}
+##  {#works-tab .smaller .spring}
 
 ```{r}
 #| label: works-code
+#| code-line-numbers: 1-4
 #| output-location: fragment
 jj_hadley <- oa_fetch(
   "works",
@@ -61,8 +72,6 @@ jj_hadley <- oa_fetch(
 
 DT::datatable(jj_hadley)
 ```
-
-
 
 ## Comparing concepts {.spring}
 
@@ -103,10 +112,12 @@ ggplot(concepts_df) +
 
 ```
 
-## {#last-notes .spring}
+## Thank you! {.spring .center}
 
-::: {.callout-tip}
-## where's the repo {.centered-slide-text}
+::: callout-tip
+## Give it a try 🌟
 
 <https://github.com/ropensci/openalexR>
 :::
+
+<!-- ### Thank you! {style="text-align: center;"} -->
